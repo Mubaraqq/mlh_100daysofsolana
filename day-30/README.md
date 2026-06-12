@@ -12,9 +12,15 @@ Created a new token using Token Extensions Program (Token-2022) with metadata en
 - Supply: 1000 (750 held by main wallet, 250 transferred)
 
 ## Commands Used
-\\\ash
-spl-token create-token --program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb --enable-metadata --decimals 6
-spl-token initialize-metadata EeNFC6M9KzyV9EPenSJxpMiHPdw8vjZdbRwCUA5WLP55 '100daysofsol' '100DSOL' '<URI>'
+spl-token create-token \
+  --program-id TokenzQdBNbLqP5VEhdkAS6EPFLC1PHnBqCXEpPxuEb \
+  --enable-metadata \
+  --decimals 6
+
+spl-token initialize-metadata EeNFC6M9KzyV9EPenSJxpMiHPdw8vjZdbRwCUA5WLP55 "100daysofsol" "100DSOL" "https://raw.githubusercontent.com/solana-developers/opos-asset/main/assets/DeveloperPortal/metadata.json"
+
 spl-token create-account EeNFC6M9KzyV9EPenSJxpMiHPdw8vjZdbRwCUA5WLP55
+
 spl-token mint EeNFC6M9KzyV9EPenSJxpMiHPdw8vjZdbRwCUA5WLP55 1000
-spl-token transfer EeNFC6M9KzyV9EPenSJxpMiHPdw8vjZdbRwCUA5WLP55 250 <RECIPIENT> --fund-recipient --allow-unfunded-recipient
+
+spl-token transfer EeNFC6M9KzyV9EPenSJxpMiHPdw8vjZdbRwCUA5WLP55 250 <RECIPIENT_ADDRESS> --fund-recipient --allow-unfunded-recipient
