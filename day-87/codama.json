@@ -1,0 +1,9 @@
+{
+  "idl": "target/idl/vault.json",
+  "scripts": {
+    "js": {
+      "from": "@codama/renderers-js",
+      "args": ["clients/js"]
+    }
+  }
+}
