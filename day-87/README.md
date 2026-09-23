@@ -1,31 +1,47 @@
-# Day 81: Let a Machine Find the Bug You'd Never Guess
+# Day 87: Give Other Developers a Typed Client for Your Program
 
 ## Description
 
-Added property-based testing with proptest and full-program fuzzing with Trident to the vault program.
+Published the vault program's IDL on-chain and generated a typed TypeScript client with Codama.
 
-## What Was Added
+## What an IDL Is
 
-- programs/vault/src/math.rs - pure apply_deposit function using checked_add
-- programs/vault/src/lib.rs - added deposit instruction that calls apply_deposit
-- programs/vault/src/math.rs - property test: deposit never shrinks a balance
-- trident-tests/fuzz_0/test_fuzz.rs - fuzz flow: deposit_never_shrinks
+The IDL (Interface Definition Language) is a JSON file Anchor generates on every build. It describes the program's instructions, accounts, types, and errors. Like an OpenAPI spec for a Solana program.
 
-## Test Results
+## What I Did
 
-Property test (proptest):
-test math::tests::deposit_never_shrinks_a_balance ... ok
+1. Rebuilt the program to get a fresh IDL
+2. Published the IDL on-chain with anchor idl init
+3. Fetched it back with anchor idl fetch to verify
+4. Installed Codama and @codama/renderers-js
+5. Created codama.json
+6. Ran npx codama run js to generate the TypeScript client
 
-Fuzz test (Trident):
-| Instruction | Invoked Total | Ix Success | Ix Failed | Instruction Panicked |
-| Deposit     | 100000        | 100000     | 0         | 0                    |
+## Commands Used
 
-100,000 deposit calls. Zero failures. The invariant held.
+anchor build
+anchor idl init -f target/idl/vault.json <PROGRAM_ID> --provider.cluster "<RPC>"
+anchor idl fetch <PROGRAM_ID> --provider.cluster "<RPC>" -o fetched-idl.json
+npm install --save-dev codama @codama/renderers-js @codama/nodes-from-anchor
+npx codama run js
+
+## What the Client Gives You
+
+- DEPOSIT_DISCRIMINATOR: the 8-byte prefix for the instruction
+- getDepositInstructionDataEncoder: encodes args into bytes
+- getDepositInstruction: builds a ready-to-send instruction
+- getDepositInstructionAsync: derives PDAs for you
+- parseDepositInstruction: turns an instruction back into a structured object
+
+## Why This Matters
+
+Without a generated client, calling the program means hand-packing byte buffers, ordering accounts correctly, and hoping the layout matches. With a generated client, the program's IDL is the source of truth. A wrong field name fails at compile time instead of in production.
 
 ## Key Learnings
 
-- Property tests check rules that must hold for all inputs
-- proptest generates hundreds of random inputs and shrinks failures to minimal cases
-- Trident fuzzes the whole program with random instruction sequences
-- proptest tests one function. Trident tests the whole program.
-- Both are needed: proptest for arithmetic, Trident for state
+- Anchor emits an IDL on every build
+- The IDL can be published on-chain at a deterministic address
+- Anyone with the program ID can fetch the IDL
+- Codama reads the IDL and generates a typed client
+- The client mirrors the program: instruction names, account names, error codes all match
+- The generated client is the bridge to a frontend or an AI agent
