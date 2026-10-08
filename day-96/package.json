@@ -1,0 +1,17 @@
+{
+  "dependencies": {
+    "@solana-program/system": "^0.15.0",
+    "@solana/kit": "^8.4.0",
+    "openai": "^6.49.0"
+  },
+  "name": "day-96",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}

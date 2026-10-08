@@ -1,0 +1,6 @@
+node_modules/
+agent-wallet.json
+savings-wallet.json
+savings-wallet-old.json
+run-log.json
+.env
